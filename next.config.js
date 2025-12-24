@@ -2,9 +2,7 @@
 const nextConfig = {
   images: {
     domains: [],
-    unoptimized: false,
   },
-  output: 'standalone',
 };
 
 module.exports = nextConfig;
