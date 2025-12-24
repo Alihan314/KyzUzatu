@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// Explicitly set runtime for Vercel compatibility
-export const runtime = "nodejs";
+// Use edge runtime for better Vercel compatibility and performance
+// Remove this line if you need Node.js APIs (fs, crypto, etc.)
+export const runtime = "edge";
 
 export async function POST(request: NextRequest) {
   try {
@@ -48,5 +49,17 @@ export async function OPTIONS() {
       "Access-Control-Allow-Headers": "Content-Type",
     },
   });
+}
+
+// Add GET handler for health checks and debugging
+export async function GET() {
+  return NextResponse.json(
+    { 
+      message: "RSVP API endpoint is working",
+      endpoint: "/api/rsvp",
+      methods: ["POST", "OPTIONS", "GET"]
+    },
+    { status: 200 }
+  );
 }
 
