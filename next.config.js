@@ -3,9 +3,11 @@ const nextConfig = {
   images: {
     domains: [],
   },
-  // Ensure API routes are properly handled
+  // Ensure proper routing on Vercel
+  output: 'standalone',
+  // Disable static optimization for dynamic routes
   experimental: {
-    // This helps with Vercel deployment
+    // Helps with Vercel deployment
   },
 };
 
