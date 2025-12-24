@@ -1,9 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-
-// Ensure this page is properly exported for Vercel
-export const dynamic = "force-dynamic";
 import { Language } from "@/config/site";
 import LanguageToggle from "@/components/LanguageToggle";
 import MusicToggle from "@/components/MusicToggle";
