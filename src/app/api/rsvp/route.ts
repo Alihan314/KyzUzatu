@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// Use edge runtime for better Vercel compatibility and performance
-// Remove this line if you need Node.js APIs (fs, crypto, etc.)
-export const runtime = "edge";
+// Using default runtime (Edge Runtime) - no explicit declaration needed
+// This avoids the static generation warning and works better with Vercel
 
 export async function POST(request: NextRequest) {
   try {
