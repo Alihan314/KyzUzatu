@@ -10,6 +10,7 @@ export default function RSVPForm({ language }: { language: Language }) {
   const [attendance, setAttendance] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const texts = siteConfig.texts[language].rsvp;
 
@@ -18,6 +19,7 @@ export default function RSVPForm({ language }: { language: Language }) {
     if (!name || !phone || !attendance) return;
 
     setIsSubmitting(true);
+    setError(null);
 
     try {
       const response = await fetch("/api/rsvp", {
@@ -33,9 +35,37 @@ export default function RSVPForm({ language }: { language: Language }) {
         setName("");
         setPhone("");
         setAttendance("");
+      } else {
+        // Handle different error statuses
+        if (response.status === 404) {
+          setError(
+            language === "kz"
+              ? "API endpoint табылмады. Деректерді сақтау мүмкін емес."
+              : "API endpoint не найден. Невозможно сохранить данные."
+          );
+        } else if (response.status === 400) {
+          const data = await response.json();
+          setError(
+            data.error ||
+              (language === "kz"
+                ? "Деректер дұрыс емес. Барлық өрістерді толтырыңыз."
+                : "Данные некорректны. Заполните все поля.")
+          );
+        } else {
+          setError(
+            language === "kz"
+              ? "Қате орын алды. Кейінірек қайталап көріңіз."
+              : "Произошла ошибка. Попробуйте позже."
+          );
+        }
       }
     } catch (error) {
       console.error("Error submitting RSVP:", error);
+      setError(
+        language === "kz"
+          ? "Желі қатесі. Интернет байланысын тексеріңіз."
+          : "Ошибка сети. Проверьте подключение к интернету."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -68,6 +98,15 @@ export default function RSVPForm({ language }: { language: Language }) {
         <h3 className="text-2xl font-bold text-white mb-6 text-center">
           {texts.title}
         </h3>
+        {error && (
+          <motion.div
+            className="mb-4 p-3 bg-red-500/20 border border-red-500/50 rounded-large text-red-100 text-sm"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            {error}
+          </motion.div>
+        )}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-white mb-2 font-medium">
